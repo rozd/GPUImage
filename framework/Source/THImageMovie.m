@@ -28,6 +28,8 @@
     int imageBufferWidth, imageBufferHeight;
 
     AVAssetReaderOutput *readerVideoTrackOutput;
+
+    BOOL readingRepeated;
 }
 
 - (void)processAsset;
@@ -158,6 +160,8 @@ THImageMovie
 
 - (void)startProcessing
 {
+    readingRepeated = NO;
+
     dispatch_group_enter([THImageMovieManager shared].readingAllReadyDispatchGroup);
     if( self.playerItem ) {
         [self processPlayerItem];
@@ -271,8 +275,11 @@ THImageMovie
 //        [synchronizedMovieWriter enableSynchronizationCallbacks];
 //    }
 //    else
-//    {
+
+    if (!readingRepeated)
+    {
         dispatch_group_leave([THImageMovieManager shared].readingAllReadyDispatchGroup);
+    }
 //        while (reader.status == AVAssetReaderStatusReading && (!_shouldRepeat || keepLooping))
 //        {
 //                [weakSelf readNextVideoFrameFromOutput:readerVideoTrackOutput];
@@ -305,8 +312,23 @@ THImageMovie
     __unsafe_unretained THImageMovie *weakSelf = self;
     if (reader.status == AVAssetReaderStatusReading && (!_shouldRepeat || keepLooping))
     {
+        if ([weakSelf readNextVideoFrameFromOutput:readerVideoTrackOutput])
+        {
+            return YES;
+        }
+        else
+        {
+            if (keepLooping)
+            {
+                [weakSelf repeatReading];
 
-        return [weakSelf readNextVideoFrameFromOutput:readerVideoTrackOutput];
+                return [weakSelf readNextVideoFrameFromOutput:readerVideoTrackOutput];
+            }
+            else
+            {
+                return NO;
+            }
+        }
     }
 
     if (reader.status == AVAssetWriterStatusCompleted) {
@@ -326,6 +348,16 @@ THImageMovie
     }
 
     return NO;
+}
+
+- (void)repeatReading
+{
+    readingRepeated = YES;
+
+    [reader cancelReading];
+    reader = nil;
+
+    [self processAsset];
 }
 
 - (void)processPlayerItem
