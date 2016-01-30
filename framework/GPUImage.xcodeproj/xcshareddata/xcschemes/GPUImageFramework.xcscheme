@@ -52,6 +52,15 @@
             ReferencedContainer = "container:GPUImage.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <BuildableProductRunnable>
+        <BuildableReference
+          BuildableIdentifier = "primary"
+          BlueprintIdentifier = "BCB5DDC914E86899000AF3C2"
+          BuildableName = "ChromaKeyVideoMerge.app"
+          BlueprintName = "ChromaKeyVideoMerge"
+          ReferencedContainer = "container:../examples/iOS/ChromaKeyVideoMerge/ChromaKeyVideoMerge.xcodeproj">
+       </BuildableReference>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
