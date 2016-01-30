@@ -174,3 +174,8 @@ FOUNDATION_EXPORT const unsigned char GPUImageFrameworkVersionString[];
 #import <GPUImage/GPUImageMovieComposition.h>
 #import <GPUImage/GPUImageColourFASTFeatureDetector.h>
 #import <GPUImage/GPUImageColourFASTSamplingOperation.h>
+
+// Tuo's classes
+#import <GPUImage/THImageMovie.h>
+#import <GPUImage/THImageMovieWriter.h>
+#import <GPUImage/THImageMovieManager.h>
